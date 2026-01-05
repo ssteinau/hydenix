@@ -74,8 +74,8 @@ in
         VSCODE_SETTINGS="$HOME/.config/Code/User/settings.json"
         if [ -f "$VSCODE_SETTINGS" ]; then
           echo "Applying custom VS Code user settings..."
-          \${pkgs.jq}/bin/jq '"'"'. + $settings'"'"' \
-            --argjson settings '"'"'\${builtins.toJSON cfg.vscode.userSettings}'"'"' \
+          ${pkgs.jq}/bin/jq '. + $settings' \
+            --argjson settings '${builtins.toJSON cfg.vscode.userSettings}' \
             "$VSCODE_SETTINGS" > "$VSCODE_SETTINGS.tmp" \
             && mv "$VSCODE_SETTINGS.tmp" "$VSCODE_SETTINGS"
           echo "VS Code user settings applied"
