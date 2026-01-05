@@ -65,11 +65,6 @@ in
         default = true;
         description = "Enable starship shell";
       };
-      userConfig = lib.mkOption {
-        type = lib.types.attrs;
-        default = {};
-        description = "User starship configuration that overrides Hyde's default. When set, completely replaces Hyde's starship.toml.";
-      };
     };
 
     pokego = {
@@ -340,19 +335,10 @@ in
         ".config/lsd/colors.yaml".source = "${pkgs.hyde}/Configs/.config/lsd/colors.yaml";
       }
 
-      # Starship configs - use userConfig if provided, otherwise use Hyde defaults
-      (lib.mkIf cfg.starship.enable (
-        if cfg.starship.userConfig != {} then
-          {
-            ".config/starship/starship.toml".text = lib.generators.toINI {} cfg.starship.userConfig;
-            ".config/starship/powerline.toml".source = "${pkgs.hyde}/Configs/.config/starship/powerline.toml";
-          }
-        else
-          {
-            ".config/starship/powerline.toml".source = "${pkgs.hyde}/Configs/.config/starship/powerline.toml";
-            ".config/starship/starship.toml".source = "${pkgs.hyde}/Configs/.config/starship/starship.toml";
-          }
-      ))
+      (lib.mkIf cfg.starship.enable {
+        ".config/starship/powerline.toml".source = "${pkgs.hyde}/Configs/.config/starship/powerline.toml";
+        ".config/starship/starship.toml".source = "${pkgs.hyde}/Configs/.config/starship/starship.toml";
+      })
     ];
   };
 }
