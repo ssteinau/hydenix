@@ -80,6 +80,22 @@ in
       mutableExtensionsDir = true;
     };
 
+    # Override Hyde VS Code settings with user-provided settings
+    # This runs AFTER home.file links, so it will persist user settings
+    home.activation.applyVsCodeUserSettings = lib.mkIf (cfg.vscode.enable && cfg.vscode.userSettings != {}) (
+      lib.hm.dag.entryAfter ["reloadSystemd"] ''
+        VSCODE_SETTINGS="$HOME/.config/Code/User/settings.json"
+        if [ -f "$VSCODE_SETTINGS" ]; then
+          $DRY_RUN_CMD echo "Applying custom VS Code user settings..."
+          $DRY_RUN_CMD ${pkgs.jq}/bin/jq '. + $settings' \
+            --argjson settings '${builtins.toJSON cfg.vscode.userSettings}' \
+            "$VSCODE_SETTINGS" > "$VSCODE_SETTINGS.tmp"
+          $DRY_RUN_CMD mv "$VSCODE_SETTINGS.tmp" "$VSCODE_SETTINGS"
+          $DRY_RUN_CMD echo "VS Code user settings applied"
+        fi
+      ''
+    );
+
     xdg.mimeApps = {
       defaultApplications = {
         "text/plain" = [ "${cfg.default}.desktop" ];
@@ -110,21 +126,11 @@ in
           force = true;
           mutable = true;
         };
-        
-        # Merge Hyde settings with userSettings at build time
-        ".config/Code/User/settings.json" = 
-          if cfg.vscode.userSettings != {} then {
-            text = let
-              hydeSettings = builtins.fromJSON (builtins.readFile "${pkgs.hyde}/Configs/.config/Code/User/settings.json");
-              mergedSettings = hydeSettings // cfg.vscode.userSettings;
-            in builtins.toJSON mergedSettings;
-            force = true;
-          } else {
-            source = "${pkgs.hyde}/Configs/.config/Code/User/settings.json";
-            force = true;
-            mutable = true;
-          };
-        
+        ".config/Code/User/settings.json" = {
+          source = "${pkgs.hyde}/Configs/.config/Code/User/settings.json";
+          force = true;
+          mutable = true;
+        };
         ".config/VSCodium/User/settings.json" = {
           source = "${pkgs.hyde}/Configs/.config/VSCodium/User/settings.json";
           force = true;
