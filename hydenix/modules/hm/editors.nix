@@ -35,6 +35,18 @@ in
         description = "Additional VS Code user settings to override Hyde defaults";
         example = { "workbench.sideBar.location" = "left"; };
       };
+
+      extensions = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [];
+        description = "List of VS Code extensions to install";
+        example = lib.literalExpression ''
+          with pkgs.vscode-extensions; [
+            eamodio.gitlens
+            ms-dotnettools.csharp
+          ]
+        '';
+      };
     };
 
     neovim = lib.mkOption {
@@ -65,20 +77,22 @@ in
     programs.vscode = lib.mkIf cfg.vscode.enable {
       enable = true;
       package = pkgs.vscode.fhs;
-      mutableExtensionsDir = true;
+      mutableExtensionsDir = false;
+      extensions = cfg.vscode.extensions;
     };
 
     # Override Hyde VS Code settings with user-provided settings
+    # This runs AFTER home.file links, so it will persist user settings
     home.activation.applyVsCodeUserSettings = lib.mkIf (cfg.vscode.enable && cfg.vscode.userSettings != {}) (
-      lib.hm.dag.entryAfter ["linkGeneration"] ''
+      lib.hm.dag.entryAfter ["writeBoundary"] ''
         VSCODE_SETTINGS="$HOME/.config/Code/User/settings.json"
         if [ -f "$VSCODE_SETTINGS" ]; then
-          echo "Applying custom VS Code user settings..."
-          ${pkgs.jq}/bin/jq '. + $settings' \
+          $DRY_RUN_CMD echo "Applying custom VS Code user settings..."
+          $DRY_RUN_CMD ${pkgs.jq}/bin/jq '. + $settings' \
             --argjson settings '${builtins.toJSON cfg.vscode.userSettings}' \
             "$VSCODE_SETTINGS" > "$VSCODE_SETTINGS.tmp" \
-            && mv "$VSCODE_SETTINGS.tmp" "$VSCODE_SETTINGS"
-          echo "VS Code user settings applied"
+            && $DRY_RUN_CMD mv "$VSCODE_SETTINGS.tmp" "$VSCODE_SETTINGS"
+          $DRY_RUN_CMD echo "VS Code user settings applied"
         fi
       ''
     );
