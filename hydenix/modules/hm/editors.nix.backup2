@@ -149,10 +149,9 @@ in
       # Link user-provided extensions
       (lib.mkMerge (lib.lists.imap0 (i: ext:
         let
-          publisher = ext.vscodeExtPublisher;
-          name = ext.vscodeExtName;
-          version = ext.version;
-          extDir = ".vscode/extensions/${publisher}.${name}-${version}";
+          publisher = lib.head (lib.splitString "." ext.vscodeExtPublisher);
+          name = lib.last (lib.splitString "." ext.vscodeExtPublisher);
+          extDir = ".vscode/extensions/${publisher}.${name}-${ext.vscodeExtUniqueId}";
         in
         {
           "${extDir}" = {
