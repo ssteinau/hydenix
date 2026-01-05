@@ -70,7 +70,7 @@ in
 
     # Override Hyde VS Code settings with user-provided settings
     home.activation.applyVsCodeUserSettings = lib.mkIf (cfg.vscode.enable && cfg.vscode.userSettings != {}) (
-      lib.hm.dag.entryAfter ["linkGeneration"] '"'"'
+      lib.hm.dag.entryAfter ["linkGeneration"] ''
         VSCODE_SETTINGS="$HOME/.config/Code/User/settings.json"
         if [ -f "$VSCODE_SETTINGS" ]; then
           echo "Applying custom VS Code user settings..."
@@ -80,7 +80,7 @@ in
             && mv "$VSCODE_SETTINGS.tmp" "$VSCODE_SETTINGS"
           echo "VS Code user settings applied"
         fi
-      '"'"'
+      ''
     );
 
     xdg.mimeApps = {
