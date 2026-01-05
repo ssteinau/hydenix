@@ -83,7 +83,7 @@ in
     # Override Hyde VS Code settings with user-provided settings
     # This runs AFTER home.file links, so it will persist user settings
     home.activation.applyVsCodeUserSettings = lib.mkIf (cfg.vscode.enable && cfg.vscode.userSettings != {}) (
-      lib.hm.dag.entryAfter ["writeBoundary"] ''
+      lib.hm.dag.entryAfter ["reloadSystemd"] ''
         VSCODE_SETTINGS="$HOME/.config/Code/User/settings.json"
         if [ -f "$VSCODE_SETTINGS" ]; then
           $DRY_RUN_CMD echo "Applying custom VS Code user settings..."
