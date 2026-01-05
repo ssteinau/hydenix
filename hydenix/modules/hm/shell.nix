@@ -344,7 +344,7 @@ in
       (lib.mkIf cfg.starship.enable (
         if cfg.starship.userConfig != {} then
           {
-            ".config/starship/starship.toml".text = lib.generators.toINI {} cfg.starship.userConfig;
+            ".config/starship/starship.toml".source = (pkgs.formats.toml {}).generate "starship.toml" cfg.starship.userConfig;
             ".config/starship/powerline.toml".source = "${pkgs.hyde}/Configs/.config/starship/powerline.toml";
           }
         else
