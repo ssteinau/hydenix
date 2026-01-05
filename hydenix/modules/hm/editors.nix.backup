@@ -28,13 +28,6 @@ in
         default = true;
         description = "Enable wallbash extension for vscode";
       };
-
-      userSettings = lib.mkOption {
-        type = lib.types.attrs;
-        default = {};
-        description = "Additional VS Code user settings to override Hyde defaults";
-        example = { "workbench.sideBar.location" = "left"; };
-      };
     };
 
     neovim = lib.mkOption {
@@ -67,21 +60,6 @@ in
       package = pkgs.vscode.fhs;
       mutableExtensionsDir = true;
     };
-
-    # Override Hyde VS Code settings with user-provided settings
-    home.activation.applyVsCodeUserSettings = lib.mkIf (cfg.vscode.enable && cfg.vscode.userSettings != {}) (
-      lib.hm.dag.entryAfter ["linkGeneration"] '"'"'
-        VSCODE_SETTINGS="$HOME/.config/Code/User/settings.json"
-        if [ -f "$VSCODE_SETTINGS" ]; then
-          echo "Applying custom VS Code user settings..."
-          \${pkgs.jq}/bin/jq '"'"'. + $settings'"'"' \
-            --argjson settings '"'"'\${builtins.toJSON cfg.vscode.userSettings}'"'"' \
-            "$VSCODE_SETTINGS" > "$VSCODE_SETTINGS.tmp" \
-            && mv "$VSCODE_SETTINGS.tmp" "$VSCODE_SETTINGS"
-          echo "VS Code user settings applied"
-        fi
-      '"'"'
-    );
 
     xdg.mimeApps = {
       defaultApplications = {
