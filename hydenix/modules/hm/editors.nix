@@ -77,8 +77,7 @@ in
     programs.vscode = lib.mkIf cfg.vscode.enable {
       enable = true;
       package = pkgs.vscode.fhs;
-      mutableExtensionsDir = false;
-      extensions = cfg.vscode.extensions;
+      mutableExtensionsDir = true;
     };
 
     # Override Hyde VS Code settings with user-provided settings
@@ -90,8 +89,8 @@ in
           $DRY_RUN_CMD echo "Applying custom VS Code user settings..."
           $DRY_RUN_CMD ${pkgs.jq}/bin/jq '. + $settings' \
             --argjson settings '${builtins.toJSON cfg.vscode.userSettings}' \
-            "$VSCODE_SETTINGS" > "$VSCODE_SETTINGS.tmp" \
-            && $DRY_RUN_CMD mv "$VSCODE_SETTINGS.tmp" "$VSCODE_SETTINGS"
+            "$VSCODE_SETTINGS" > "$VSCODE_SETTINGS.tmp"
+          $DRY_RUN_CMD mv "$VSCODE_SETTINGS.tmp" "$VSCODE_SETTINGS"
           $DRY_RUN_CMD echo "VS Code user settings applied"
         fi
       ''
@@ -147,6 +146,20 @@ in
           force = true;
         };
       })
+      # Link user-provided extensions
+      (lib.mkMerge (lib.lists.imap0 (i: ext:
+        let
+          publisher = lib.head (lib.splitString "." ext.vscodeExtPublisher);
+          name = lib.last (lib.splitString "." ext.vscodeExtPublisher);
+          extDir = ".vscode/extensions/${publisher}.${name}-${ext.vscodeExtUniqueId}";
+        in
+        {
+          "${extDir}" = {
+            source = "${ext}/share/vscode/extensions/${publisher}.${name}";
+            recursive = true;
+          };
+        }
+      ) cfg.vscode.extensions))
 
       (lib.mkIf (cfg.vim or cfg.neovim) {
         ".config/vim/colors/wallbash.vim" = {
