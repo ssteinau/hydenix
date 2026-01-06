@@ -21,12 +21,12 @@ in
   # TODO: review stateful files in hyde module
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
-      hyde
+      pkgs.hyde
       Bibata-Modern-Ice
       Tela-circle-dracula
       kdePackages.kconfig # TODO: not sure if this is still needed
       wf-recorder # screen recorder for wlroots-based compositors such as sway
-      python-pyamdgpuinfo
+      # python-pyamdgpuinfo # not available in nixpkgs
       hyq
       hydectl
       hyde-ipc
@@ -85,7 +85,7 @@ in
 
       ".local/bin/hyde-shell" = {
         source = pkgs.writeShellScript "hyde-shell" ''
-          export PYTHONPATH="${pkgs.python-pyamdgpuinfo}/${pkgs.python3.sitePackages}:$PYTHONPATH"
+          export PYTHONPATH="${pkgs.# python-pyamdgpuinfo # not available in nixpkgs}/${pkgs.python3.sitePackages}:$PYTHONPATH"
           exec "${pkgs.hyde}/Configs/.local/bin/hyde-shell" "$@"
         '';
         executable = true;
