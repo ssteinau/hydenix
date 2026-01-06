@@ -239,7 +239,10 @@ in
         mutable = true;
       };
       ".config/waybar/config.jsonc" = {
-        source = "${pkgs.hyde}/Configs/.config/waybar/config.jsonc";
+        text = builtins.replaceStrings
+          [ "// \"$XDG_CONFIG_HOME/waybar/includes/includes.json\"" ]
+          [ "\"$XDG_CONFIG_HOME/waybar/includes/includes.json\"," ]
+          (builtins.readFile "${pkgs.hyde}/Configs/.config/waybar/config.jsonc");
         force = true;
         mutable = true;
       };
