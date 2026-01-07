@@ -41,8 +41,16 @@ pkgs.stdenv.mkDerivation {
     sed -i '5d' Configs/.local/lib/hyde/rofilaunch.sh
 
     # Fix windowrules for Hyprland 0.53+ compatibility
-    # Line 11: Change "floating:1" syntax to use windowrulev2 and remove < symbols
+    # Fix line 11: floating:1 syntax and < symbols
     sed -i '11s/windowrule = size <85% <95%,floating:1/windowrulev2 = size 85% 95%,floating:1/' Configs/.local/share/hypr/windowrules.conf
+    # Fix line 12: windowrule with tag needs windowrulev2
+    sed -i '12s/^windowrule = float,tag:/windowrulev2 = float,tag:/' Configs/.local/share/hypr/windowrules.conf
+    # Fix line 13: remove < symbols and use windowrulev2 for tag
+    sed -i '13s/windowrule = size <60% <90%,tag:/windowrulev2 = size 60% 90%,tag:/' Configs/.local/share/hypr/windowrules.conf
+    # Fix line 16: windowrule with tag needs windowrulev2
+    sed -i '16s/^windowrule = float,tag:/windowrulev2 = float,tag:/' Configs/.local/share/hypr/windowrules.conf
+    # Fix line 17: windowrule with tag needs windowrulev2
+    sed -i '17s/^windowrule = center,tag:/windowrulev2 = center,tag:/' Configs/.local/share/hypr/windowrules.conf
 
     # BUILD FONTS
     mkdir -p $out/share/fonts/truetype
