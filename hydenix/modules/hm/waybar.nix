@@ -247,5 +247,13 @@ in
         mutable = true;
       };
     };
+
+    # Activation script to fix waybar config after Hyde initialization
+    home.activation.fixWaybarConfig = config.lib.dag.entryAfter ["writeBoundary"] ''
+      # Replace $HOME with actual home directory in waybar config if it exists
+      if [ -f "${config.xdg.configHome}/waybar/config.jsonc" ]; then
+        ${pkgs.gnused}/bin/sed -i 's|\$HOME|${config.home.homeDirectory}|g' "${config.xdg.configHome}/waybar/config.jsonc"
+      fi
+    '';
   };
 }
