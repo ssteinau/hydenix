@@ -40,6 +40,10 @@ pkgs.stdenv.mkDerivation {
     # remove pkill command from rofilaunch.sh
     sed -i '5d' Configs/.local/lib/hyde/rofilaunch.sh
 
+    # Fix windowrules for Hyprland 0.53+ compatibility
+    # Line 11: Change "floating:1" syntax to use windowrulev2 and remove < symbols
+    sed -i '11s/windowrule = size <85% <95%,floating:1/windowrulev2 = size 85% 95%,floating:1/' Configs/.local/share/hypr/windowrules.conf
+
     # BUILD FONTS
     mkdir -p $out/share/fonts/truetype
     for fontarchive in ./Source/arcs/Font_*.tar.gz; do
