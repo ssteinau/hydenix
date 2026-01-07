@@ -247,15 +247,5 @@ in
         mutable = true;
       };
     };
-
-    # Activation script to fix layout files with absolute paths
-    home.activation.fixWaybarLayouts = config.lib.dag.entryAfter ["writeBoundary"] ''
-      # Replace $HOME with actual home directory in all layout files
-      for layout in ${config.xdg.dataHome}/waybar/layouts/*.jsonc; do
-        if [ -f "$layout" ] && [ -w "$layout" ]; then
-          ${pkgs.gnused}/bin/sed -i "s|\$HOME|${config.home.homeDirectory}|g" "$layout"
-        fi
-      done
-    '';
   };
 }

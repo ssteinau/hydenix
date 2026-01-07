@@ -128,25 +128,10 @@ in
         source = "${pkgs.hyde}/Configs/.local/share/waybar/includes";
         recursive = true;
       };
-      ".local/share/waybar/layouts/khing.jsonc" = {
-        text = builtins.replaceStrings
-          [ "$HOME" ]
-          [ config.home.homeDirectory ]
-          (builtins.readFile "${pkgs.hyde}/Configs/.local/share/waybar/layouts/khing.jsonc");
-        force = true;
-      };
-      ".local/share/waybar/layouts/macos.jsonc" = {
-        text = builtins.replaceStrings
-          [ "$HOME" ]
-          [ config.home.homeDirectory ]
-          (builtins.readFile "${pkgs.hyde}/Configs/.local/share/waybar/layouts/macos.jsonc");
-        force = true;
-      };
-      ".local/share/waybar/layouts/hyprdots" = {
-        source = "${pkgs.hyde}/Configs/.local/share/waybar/layouts/hyprdots";
+      ".local/share/waybar/layouts" = {
+        source = "${pkgs.hyde}/Configs/.local/share/waybar/layouts";
         recursive = true;
       };
-
       ".local/share/waybar/menus" = {
         source = "${pkgs.hyde}/Configs/.local/share/waybar/menus";
         recursive = true;
