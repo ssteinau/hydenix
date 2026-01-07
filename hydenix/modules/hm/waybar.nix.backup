@@ -194,26 +194,8 @@ in
             "privacy": {
                 "icon-size": 10,
                 "icon-size-multiplier": 1
-          [
-            ""$XDG_CONFIG_HOME/waybar/modules/*json*""
-            ""$XDG_DATA_HOME/waybar/modules/*json*""
-            "// "$XDG_CONFIG_HOME/waybar/includes/includes.json""
-          ]
-          [
-            ""${config.xdg.configHome}/waybar/modules/*json*","
-            ""${config.xdg.dataHome}/waybar/modules/*json*","
-            ""${config.xdg.configHome}/waybar/includes/includes.json","
-          ]
-          [
-            ""$XDG_CONFIG_HOME/waybar/modules/*json*""
-            ""$XDG_DATA_HOME/waybar/modules/*json*""
-            "// "$XDG_CONFIG_HOME/waybar/includes/includes.json""
-          ]
-          [
-            ""${config.xdg.configHome}/waybar/modules/*json*","
-            ""${config.xdg.dataHome}/waybar/modules/*json*","
-            ""${config.xdg.configHome}/waybar/includes/includes.json","
-          ]
+            },
+            "tray": {
                 "icon-size": 16.0,
                 "icon-size-multiplier": 1.6
             }
@@ -258,8 +240,8 @@ in
       };
       ".config/waybar/config.jsonc" = {
         text = builtins.replaceStrings
-          [ "// \"$XDG_CONFIG_HOME/waybar/includes/includes.json\"" ]
-          [ "\"$XDG_CONFIG_HOME/waybar/includes/includes.json\"," ]
+          [ "\"\$XDG_CONFIG_HOME/waybar/modules/*json*\"," "\"\$XDG_DATA_HOME/waybar/modules/*json*\"" "// \"\$XDG_CONFIG_HOME/waybar/includes/includes.json\"" ]
+          [ "\"${config.xdg.configHome}/waybar/modules/*json*\"," "\"${config.xdg.dataHome}/waybar/modules/*json*\"," "\"${config.xdg.configHome}/waybar/includes/includes.json\"" ]
           (builtins.readFile "${pkgs.hyde}/Configs/.config/waybar/config.jsonc");
         force = true;
         mutable = true;
