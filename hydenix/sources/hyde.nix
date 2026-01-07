@@ -59,6 +59,10 @@ pkgs.stdenv.mkDerivation {
     sed -i '41,61s/^windowrule = tag/windowrulev2 = tag/' Configs/.local/share/hypr/windowrules.conf
     # Fix line 17: windowrule with tag needs windowrulev2
     sed -i '17s/^windowrule = center,tag:/windowrulev2 = center,tag:/' Configs/.local/share/hypr/windowrules.conf
+    # Fix lines 20,23,27-38: all remaining float rules need windowrulev2
+    sed -i '20s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
+    sed -i '23s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
+    sed -i '27,38s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
 
     # BUILD FONTS
     mkdir -p $out/share/fonts/truetype
