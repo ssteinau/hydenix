@@ -41,7 +41,7 @@ in
     home.packages =
       with pkgs;
       lib.optionals cfg.waybar.enable [
-        waybar # system bar
+        waybar-git # system bar (git version for glob pattern includes support)
         playerctl # media player cli
         gobject-introspection # for python packages
         (python3.withPackages (ps: with ps; [ pygobject3 ])) # python with pygobject3
