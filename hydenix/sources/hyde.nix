@@ -62,6 +62,8 @@ pkgs.stdenv.mkDerivation {
     # Fix lines 20,23,27-38: all remaining float rules need windowrulev2
     sed -i '20s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
     sed -i '23s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
+    # Fix waybar config includes - replace env vars with actual paths
+    find Configs/.local/share/waybar/Configs -name "*.jsonc" -type f -print0 | xargs -0 sed -i 's|$XDG_CONFIG_HOME|~/.config|g; s|$XDG_DATA_HOME|~/.local/share|g'
     # Fix lines 66-77: all layerrule need layerrulev2
     sed -i '66,77s/^layerrule = /layerrulev2 = /' Configs/.local/share/hypr/windowrules.conf
     sed -i '27,38s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
