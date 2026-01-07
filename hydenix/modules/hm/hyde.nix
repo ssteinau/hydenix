@@ -85,7 +85,6 @@ in
 
       ".local/bin/hyde-shell" = {
         source = pkgs.writeShellScript "hyde-shell" ''
-          export PYTHONPATH="${pkgs.# python-pyamdgpuinfo # not available in nixpkgs}/${pkgs.python3.sitePackages}:$PYTHONPATH"
           exec "${pkgs.hyde}/Configs/.local/bin/hyde-shell" "$@"
         '';
         executable = true;
