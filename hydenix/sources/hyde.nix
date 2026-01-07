@@ -49,6 +49,14 @@ pkgs.stdenv.mkDerivation {
     sed -i '13s/windowrule = size <60% <90%,tag:/windowrulev2 = size 60% 90%,tag:/' Configs/.local/share/hypr/windowrules.conf
     # Fix line 16: windowrule with tag needs windowrulev2
     sed -i '16s/^windowrule = float,tag:/windowrulev2 = float,tag:/' Configs/.local/share/hypr/windowrules.conf
+    # Fix lines 21-22,24-26: multiple criteria need windowrulev2
+    sed -i '21s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
+    sed -i '22s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
+    sed -i '24s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
+    sed -i '25s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
+    sed -i '26s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
+    # Fix lines 41-61: tag rules with title/class need windowrulev2
+    sed -i '41,61s/^windowrule = tag/windowrulev2 = tag/' Configs/.local/share/hypr/windowrules.conf
     # Fix line 17: windowrule with tag needs windowrulev2
     sed -i '17s/^windowrule = center,tag:/windowrulev2 = center,tag:/' Configs/.local/share/hypr/windowrules.conf
 
