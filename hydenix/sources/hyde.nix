@@ -63,9 +63,9 @@ pkgs.stdenv.mkDerivation {
     sed -i '20s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
     sed -i '23s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
     # Fix waybar config includes - uncomment includes.json and fix JSON syntax
-    find Configs/.local/share/waybar/layouts -name "*.jsonc" -type f -exec sed -i 's|$XDG_CONFIG_HOME/waybar/modules/*json*"|$XDG_CONFIG_HOME/waybar/modules/*json*",|g; s|$XDG_DATA_HOME/waybar/modules/*json*"|$XDG_DATA_HOME/waybar/modules/*json*",|g; s|// "$XDG_CONFIG_HOME/waybar/includes/includes.json"|"$XDG_CONFIG_HOME/waybar/includes/includes.json"|g' {} ;
+    find Configs/.local/share/waybar/layouts -name "*.jsonc" -type f -print0 | xargs -0 sed -i 's|$XDG_CONFIG_HOME/waybar/modules/*json*"|$XDG_CONFIG_HOME/waybar/modules/*json*",|g; s|$XDG_DATA_HOME/waybar/modules/*json*"|$XDG_DATA_HOME/waybar/modules/*json*",|g; s|// "$XDG_CONFIG_HOME/waybar/includes/includes.json"|"$XDG_CONFIG_HOME/waybar/includes/includes.json"|g'
     # Expand environment variables to absolute paths in waybar layouts
-    find Configs/.local/share/waybar/layouts -name "*.jsonc" -type f -exec sed -i 's|$XDG_CONFIG_HOME|$HOME/.config|g; s|$XDG_DATA_HOME|$HOME/.local/share|g' {} ;
+    find Configs/.local/share/waybar/layouts -name "*.jsonc" -type f -print0 | xargs -0 sed -i 's|$XDG_CONFIG_HOME|$HOME/.config|g; s|$XDG_DATA_HOME|$HOME/.local/share|g'
     # Fix lines 66-77: all layerrule need layerrulev2
     sed -i '66,77s/^layerrule = /layerrulev2 = /' Configs/.local/share/hypr/windowrules.conf
     sed -i '27,38s/^windowrule = /windowrulev2 = /' Configs/.local/share/hypr/windowrules.conf
